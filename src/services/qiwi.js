@@ -1,6 +1,6 @@
 const QiwiPayments = require("@qiwi/bill-payments-node-js-sdk")
 
-const qiwi = new QiwiPayments(process.env.QIWI_TOKEN)
+const qiwi = new QiwiPayments(process.env.QIWI_PRIVATE_KEY)
 
 function createBill(amount, currency, origin) {
   const billId = qiwi.generateId();
@@ -8,7 +8,7 @@ function createBill(amount, currency, origin) {
     amount,
     currency,
     comment: `Оплата товара. Счёт: ${billId}`,
-    expirationDateTime: qiwi.getLifetimeByHours(2),
+    expirationDateTime: qiwi.getLifetimeByDay(1),
     successUrl: `${origin}/qiwi/success?bill_id=${billId}&payment=qiwi`
   }
 
