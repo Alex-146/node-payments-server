@@ -1,0 +1,15 @@
+### GET PAYMENT STATUS
+GET http://localhost:5000/qiwi/8cfafc73-59de-417f-8759-1b1207f9135f HTTP/1.1
+
+### CANCEL PAYMENT
+DELETE http://localhost:5000/qiwi/8cfafc73-59de-417f-8759-1b1207f9135f HTTP/1.1
+
+### CANCEL PAYMENT
+POST http://localhost:5000/qiwi/payment HTTP/1.1
+Content-Type: application/json
+
+{
+  "amount": 2
+}
+
+###

@@ -2,47 +2,51 @@ const express = require("express")
 const router = express.Router()
 const qiwi = require("../services/qiwi")
 
-router.get("/payment", async (req, res) => {
+router.post("/payment", async (req, res) => {
+  const { amount } = req.body
+  if (!amount) {
+    return res.status(400).json({ ok: false })
+  }
+
   try {
-    const data = await qiwi.createBill(1, "RUB", req.headers.host)
-    console.log(data)
+    const data = await qiwi.createBill(amount, "RUB", req.headers.host)
     res.json(data)
   }
   catch(error) {
-    // console.log(error)
-    res.json({ ok: false })
+    console.log("create", error.message)
+    res.status(500).json({ ok: false })
   }
 })
 
-router.get("/check/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id
     const data = await qiwi.check(id)
-    console.log(data)
     res.json(data)
   }
   catch(error) {
-    console.log(error)
-    res.json({ ok: false })
+    console.log("check", error.message)
+    res.status(500).json({ ok: false })
   }
 })
 
-router.get("/cancel/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const id = req.params.id
     const data = await qiwi.cancel(id)
-    console.log(data)
     res.json(data)
   }
   catch(error) {
-    console.log(error)
-    res.json({ ok: false })
+    console.log("cancel", error.message)
+    res.status(500).json({ ok: false })
   }
 })
 
 router.get("/success", (req, res) => {
   const { bill_id, payment } = req.query
-  res.json({ bill_id, payment })
+  const o = { bill_id, payment }
+  console.log(o)
+  res.json(o)
 })
 
 module.exports = router

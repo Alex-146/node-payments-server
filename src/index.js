@@ -18,6 +18,8 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
+app.use(express.json())
+
 app.use("/qiwi", require("./routes/qiwi"))
 app.use("/auth", require("./routes/auth"))
 

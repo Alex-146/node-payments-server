@@ -8,11 +8,7 @@ function createBill(amount, currency, origin) {
     amount,
     currency,
     comment: `Оплата товара. Счёт: ${billId}`,
-    expirationDateTime: qiwi.getLifetimeByDay(1),
-    customFields: {
-      themeCode: 'Sergei-YaS7mIY0CQe'
-    },
-    email: "foo@bar.com",
+    expirationDateTime: qiwi.getLifetimeByHours(2),
     successUrl: `${origin}/qiwi/success?bill_id=${billId}&payment=qiwi`
   }
 
