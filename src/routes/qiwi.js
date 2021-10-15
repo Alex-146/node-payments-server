@@ -1,15 +1,21 @@
 const express = require("express")
 const router = express.Router()
-const qiwi = require("../services/qiwi")
+// const qiwi = require("../services/qiwi")
+const QiwiApi = require("@qiwi/bill-payments-node-js-sdk")
+
+const qiwi = new QiwiApi(process.env.QIWI_PRIVATE_KEY)
 
 router.post("/payment", async (req, res) => {
-  const { amount } = req.body
-  if (!amount) {
-    return res.status(400).json({ ok: false })
-  }
-
+  const { billId, amount, currency, comment, expirationDateTime, customFields } = req.body
+  
   try {
-    const data = await qiwi.createBill(amount, "RUB", req.headers.host)
+    const data = await qiwi.createBill(billId, {
+      amount,
+      currency,
+      comment,
+      expirationDateTime,
+      customFields,
+    })
     res.json(data)
   }
   catch(error) {
@@ -21,7 +27,7 @@ router.post("/payment", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id
-    const data = await qiwi.check(id)
+    const data = await qiwi.getBillInfo(id)
     res.json(data)
   }
   catch(error) {
@@ -33,7 +39,7 @@ router.get("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const id = req.params.id
-    const data = await qiwi.cancel(id)
+    const data = await qiwi.cancelBill(id)
     res.json(data)
   }
   catch(error) {
